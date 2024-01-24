@@ -16,3 +16,16 @@ type Query {
   mediaItem(media_id: ID!): MediaItem
   mediaItemsByTag(tag: String!): [MediaItem]
 }
+
+input MediaItemInput {
+  user_id: ID!
+  title: String!
+  filename: String
+  filesize: String
+  media_type: String
+  description: String
+}
+
+type Mutation {
+  createMediaItem(input: MediaItemInput!): MediaItem
+}
