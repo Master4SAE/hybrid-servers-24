@@ -1,7 +1,7 @@
-import {ResultSetHeader, RowDataPacket} from 'mysql2';
-import {Tag, TagResult} from '@sharedTypes/DBTypes';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
+import { Tag, TagResult } from '@sharedTypes/DBTypes';
 import promisePool from '../../lib/db';
-import {MessageResponse} from '@sharedTypes/MessageTypes';
+import { MessageResponse } from '@sharedTypes/MessageTypes';
 
 // Request a list of tags
 const fetchAllTags = async (): Promise<Tag[] | null> => {
@@ -20,23 +20,72 @@ const fetchAllTags = async (): Promise<Tag[] | null> => {
 };
 
 // Post a new tag
-const postTag = async (
-  tag: Omit<Tag, 'tag_id'>,
-): Promise<MessageResponse | null> => {
+const postTag = async (tag: Omit<Tag,
+  'tag_id'>): Promise<Tag | null> => {
+
   try {
-    const [tagResult] = await promisePool.execute<ResultSetHeader>(
-      'INSERT INTO Tags (tag_name) VALUES (?)',
-      [tag.tag_name],
-    );
-    if (tagResult.affectedRows === 0) {
+
+    // check if tag exists (case insensitive)
+
+    const sql = promisePool.format('SELECT * FROM Tags WHERE tag_name = ?', [
+
+      tag.tag_name,
+
+    ]);
+
+    const [result] = await promisePool.execute<RowDataPacket[]>(sql);
+
+    if (result.length > 0) {
+
       return null;
+
     }
 
-    return {message: 'Tag created'};
+    const [tagResult] = await promisePool.execute<ResultSetHeader>(
+
+      'INSERT INTO Tags (tag_name) VALUES (?)',
+
+      [tag.tag_name],
+
+    );
+
+    if (tagResult.affectedRows === 0) {
+
+      return null;
+
+    }
+
+    const sql2 = promisePool.format('SELECT * FROM Tags WHERE tag_id = ?', [
+
+      tagResult.insertId,
+
+    ]);
+
+    const [selectResult] = await promisePool.execute<RowDataPacket[]
+      & Tag[]>(
+
+        sql2,
+
+      );
+
+    if (selectResult.length > 0) {
+
+      return selectResult[0];
+
+      // throw new error
+
+    }
+
+    return null;
+
   } catch (e) {
+
     console.error('postTag error', (e as Error).message);
+
     throw new Error((e as Error).message);
+
   }
+
 };
 
 // Request a list of tags by media item id
@@ -89,7 +138,7 @@ const deleteTag = async (id: number): Promise<MessageResponse | null> => {
       return null;
     }
 
-    return {message: 'Tag deleted'};
+    return { message: 'Tag deleted' };
   } catch (e) {
     await connection.rollback();
     console.error('deleteTag error', (e as Error).message);
@@ -99,4 +148,4 @@ const deleteTag = async (id: number): Promise<MessageResponse | null> => {
   }
 };
 
-export {fetchAllTags, postTag, fetchTagsByMediaId, deleteTag};
+export { fetchAllTags, postTag, fetchTagsByMediaId, deleteTag };
