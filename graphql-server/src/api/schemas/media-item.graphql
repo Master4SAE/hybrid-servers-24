@@ -10,6 +10,10 @@ type MediaItem {
   created_at: String
   tags: [Tag]
 }
+type MediaResponse {
+  message: String!
+  media: MediaItem!
+}
 
 type Query {
   mediaItems: [MediaItem]
@@ -25,7 +29,18 @@ input MediaItemInput {
   media_type: String
   description: String
 }
+input AddTagToMediaItemInput {
+  media_id: ID
+  tag_name: String
+}
+input MediaItemUpdateInput {
+  title: String
+  description: String
+}
 
 type Mutation {
   createMediaItem(input: MediaItemInput!): MediaItem
+  addTagToMediaItem(input: AddTagToMediaItemInput!): MediaItem
+  updateMediaItem(input: MediaItemUpdateInput!, media_id: ID!): MediaResponse
 }
+
