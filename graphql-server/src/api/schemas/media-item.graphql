@@ -30,8 +30,8 @@ input MediaItemInput {
   description: String
 }
 input AddTagToMediaItemInput {
-  media_id: ID
-  tag_name: String
+  media_id: ID!
+  tag_name: String!
 }
 input MediaItemUpdateInput {
   title: String

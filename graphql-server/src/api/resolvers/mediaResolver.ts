@@ -18,26 +18,13 @@ export default {
         createMediaItem: async (_parent: undefined, args: { input: Omit<MediaItem, 'media_id' | 'created_at' | 'thumbnail'> },) => {
             return postMedia(args.input);
         },
-        addTagToMediaItem: async (
+        addTagToMediaItem: async (_parent: undefined, args: { input: { media_id: string; tag_name: string } }, ) => {
+        const str = args.input.tag_name;
+        const modStr = str[0].toUpperCase() + str.slice(1);
+        console.log(str); // name
+        console.log(modStr); // Name
 
-            _parent: undefined,
-
-            args: {
-                input: {
-                    media_id: string; tag_name:
-                        string
-                }
-            },
-
-        ) => {
-
-            return await postTagToMedia(
-
-                args.input.tag_name,
-
-                Number(args.input.media_id),
-
-            );
+            return await postTagToMedia( modStr, Number(args.input.media_id), );
 
         },
 
