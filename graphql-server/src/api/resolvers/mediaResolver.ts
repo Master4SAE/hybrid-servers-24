@@ -1,5 +1,7 @@
 import { MediaItem } from '@sharedTypes/DBTypes';
+import { MyContext } from '../../local-types';
 import { fetchAllMedia, fetchMediaById, fetchMediaByTag, postMedia, putMedia, postTagToMedia } from '../models/mediaModel';
+import { GraphQLError } from 'graphql';
 
 export default {
     Query: {
@@ -15,7 +17,12 @@ export default {
         },
     },
     Mutation: {
-        createMediaItem: async (_parent: undefined, args: { input: Omit<MediaItem, 'media_id' | 'created_at' | 'thumbnail'> },) => {
+        createMediaItem: async (_parent: undefined, args: { input: Omit<MediaItem, 'media_id' | 'created_at' | 'thumbnail'> }, context: MyContext, ) => {
+            if (!context.user || context.user.user_id) {
+                throw new GraphQLError('Not authorized', {
+                    extensions: {code: 'NOT_AUTHORIZED'},
+                });
+            }
             return postMedia(args.input);
         },
         addTagToMediaItem: async (_parent: undefined, args: { input: { media_id: string; tag_name: string } }, ) => {
