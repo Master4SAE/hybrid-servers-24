@@ -1,3 +1,3 @@
-// import someResolver from './someResolver';
+import mediaResolver from './mediaResolver';
 
-// export default [someResolver];
+export default [mediaResolver];
