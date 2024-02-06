@@ -42,5 +42,6 @@ type Mutation {
   createMediaItem(input: MediaItemInput!): MediaItem
   addTagToMediaItem(input: AddTagToMediaItemInput!): MediaItem
   updateMediaItem(input: MediaItemUpdateInput!, media_id: ID!): MediaResponse
+  deleteMediaItem(input: ID!): Message
 }
 

@@ -1,5 +1,5 @@
 import { MediaItem } from '@sharedTypes/DBTypes';
-import { fetchAllMedia, fetchMediaById, fetchMediaByTag, postMedia, putMedia, postTagToMedia } from '../models/mediaModel';
+import { fetchAllMedia, fetchMediaById, fetchMediaByTag, postMedia, putMedia, postTagToMedia, deleteMedia } from '../models/mediaModel';
 
 export default {
     Query: {
@@ -30,13 +30,11 @@ export default {
 
         updateMediaItem: async (
             _parent: undefined,
-            args: {
-                input: Pick<MediaItem, 'title' | 'description'>;
-                media_id: string;
-            },
-        ) => {
+            args: {input: Pick<MediaItem, 'title' | 'description'>; media_id: string;},) => {
             return await putMedia(args.input, Number(args.media_id));
         },
-
+        deleteMediaItem:async (_parent: undefined, args: {input:string}) => {
+            return await deleteMedia(Number(args.input));
+        },
     },
 };

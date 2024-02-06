@@ -1,3 +1,4 @@
+
 type Tag {
     tag_id: ID!
     tag_name: String!
@@ -11,5 +12,5 @@ input TagInput {
 
 type Mutation {
   createTag(input: TagInput!): Tag
-  deleteTag(input: ID!): Tag
+  deleteTag(input: ID!): Message
 }
