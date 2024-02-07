@@ -11,7 +11,6 @@ import typeDefs from './api/schemas/index';
 import resolvers from './api/resolvers/index';
 import {MyContext} from './local-types/index'
 import {authenticate} from './lib/functions';
-
 import { 
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,

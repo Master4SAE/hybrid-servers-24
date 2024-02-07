@@ -21,7 +21,8 @@ const fetchData = async <T>(
   }
   return json;
 };
-const authenticate = async (req: Request): Promise<MyContext> => {
+
+const authenticate = async(req: Request): Promise<MyContext> => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
       const token = authHeader.split(' ')[1];
@@ -34,11 +35,11 @@ const authenticate = async (req: Request): Promise<MyContext> => {
           user.token = token;
           return {user};
       } catch (error) {
-        console.log((error as Error).message);
-        return {};
+          throw new GraphQLError('Invalid/Expired token', {
+              extensions: {code: 'NOT_AUTHORIZED'},
+          });
       }
   }
   return {};
 };
-
 export {fetchData, authenticate};

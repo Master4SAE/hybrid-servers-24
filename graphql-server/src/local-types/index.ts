@@ -1,6 +1,6 @@
-import { TokenContent } from '@sharedTypes/DBTypes';
+import { TokenContent, UserWithLevel } from '@sharedTypes/DBTypes';
 
-type UserFromToken = TokenContent& {
+type UserFromToken = Pick<UserWithLevel, 'user_id' | 'level_name'> & {
   token: string;
 };
 

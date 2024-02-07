@@ -2,12 +2,15 @@ type User {
     user_id: ID!
     username: String!
     email: String!
-    level_name: String!
-    created_at: String!
+    level_name: String
+    created_at: String
 }
-
+type LoginResponse {
+  token: String
+  user: User
+}
 type UserResponse {
-  user: User!
+  user: User
   message: String!
 }
 type Query {
@@ -21,4 +24,5 @@ input UserInput {
 }
 type Mutation {
   createUser(input: UserInput!): UserResponse
+  login(username: String!, password: String!): LoginResponse
 }
